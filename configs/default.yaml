@@ -1,4 +1,4 @@
-# Bifrost pipeline configuration.
+# Samsung PRISM pipeline configuration.
 # Every stage below is a flag so it can be ablated. See docs/WORKFLOW.md.
 
 chunking:

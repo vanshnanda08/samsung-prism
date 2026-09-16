@@ -1,4 +1,4 @@
-# Bifrost
+# Samsung PRISM
 
 **The bridge between what you ask and what the code does.**
 
@@ -27,7 +27,7 @@ languages.
 Most systems attack this from the query side — rewriting the question to look more like
 code. That is the weaker lever: the query arrives at runtime and you get one attempt.
 
-Bifrost closes the gap from **both sides**:
+Samsung PRISM closes the gap from **both sides**:
 
 - **Index side (offline).** For every code snippet, generate a natural-language
   description of what it does and a structural signature. Now retrieval matches English
@@ -68,7 +68,7 @@ pip install -r requirements.txt
 # 2. Reproduce the published baseline (~30-60 min on CPU)
 make baseline
 
-# 3. Run the full Bifrost pipeline evaluation
+# 3. Run the full Samsung PRISM pipeline evaluation
 make eval
 
 # 4. Run the ablation matrix
@@ -96,7 +96,7 @@ docker compose up
 | E5-Mistral 7B (published) | 21.33 | — | GPU only |
 | Voyage-Code-002 (published) | 26.52 | — | API only |
 | **Our baseline reproduction** | _TBD_ | _TBD_ | |
-| **Bifrost** | _TBD_ | _TBD_ | |
+| **Samsung PRISM** | _TBD_ | _TBD_ | |
 
 Full ablation table to be added once the eval config is frozen.
 

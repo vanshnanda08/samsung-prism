@@ -146,7 +146,7 @@ will not build it.
 - [ ] Monaco viewer with surrounding function context
 - [ ] Latency HUD
 - [ ] Commit slider with a live "re-embedded N of M chunks in T seconds" counter
-- [ ] Baseline comparison pane — same query under stock `e5-base` beside Bifrost
+- [ ] Baseline comparison pane — same query under stock `e5-base` beside Samsung PRISM
 
 ---
 

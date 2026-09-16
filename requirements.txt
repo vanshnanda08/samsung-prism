@@ -1,4 +1,4 @@
-# Bifrost — Python dependencies
+# Samsung PRISM — Python dependencies
 #
 # Versions are left unpinned until the environment is verified working.
 # Once `make baseline` completes successfully, run:

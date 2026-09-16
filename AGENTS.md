@@ -9,7 +9,7 @@
 
 ## 1. What this project is
 
-**Bifrost** is a CPU-only code retrieval engine built for **Theme 01 — Agentic Code
+**Samsung PRISM** is a CPU-only code retrieval engine built for **Theme 01 — Agentic Code
 Intelligence** of the Samsung PRISM Generative AI Hackathon, 3rd Edition (2026–27).
 
 **The task:** given a natural-language query and a library of code snippets, return a
@@ -18,7 +18,7 @@ Intelligence** of the Samsung PRISM Generative AI Hackathon, 3rd Edition (2026�
 **The central insight driving the design:** on the evaluation dataset, BM25 keyword
 search scores **0.95 NDCG@10 out of 100**. That near-zero score means natural-language
 queries and their matching code share almost no surface vocabulary. This is a
-*cross-language semantic asymmetry* problem, not a search problem. Bifrost closes the
+*cross-language semantic asymmetry* problem, not a search problem. Samsung PRISM closes the
 gap from **both sides** — enriching the index with generated natural-language
 descriptions of what each snippet does, and distilling queries down to their
 algorithmic core — so the two meet in the middle.
@@ -221,7 +221,7 @@ to improve NDCG@10 or MRR, it gets removed before submission.
 ## 8. Repository layout
 
 ```
-bifrost/
+samsung-prism/
 ├── AGENTS.md              ← you are here
 ├── CLAUDE.md              ← pointer to this file
 ├── README.md              ← human-facing overview and setup
@@ -232,7 +232,7 @@ bifrost/
 │   ├── THEME1_SPEC.md     ← distilled organiser requirements (facts only)
 │   └── WORKFLOW.md        ← day-by-day plan and role assignments
 └── src/
-    ├── bifrost/
+    ├── samsung-prism/
     │   ├── chunking/      ← tree-sitter AST-aware chunking
     │   ├── enrichment/    ← doc2query, structural signatures
     │   ├── indexing/      ← content hashing, vector + sparse indexes, lineage

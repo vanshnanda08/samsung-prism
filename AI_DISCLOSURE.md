@@ -15,7 +15,7 @@
 | Field | Value |
 |---|---|
 | Team Name | _TBD_ |
-| Project / Product Name | Bifrost |
+| Project / Product Name | Samsung PRISM |
 | Organization / Institution | Thapar Institute of Engineering & Technology, Patiala |
 | Submission Date | 25 September 2026 |
 
@@ -62,7 +62,7 @@ Copy this block for each feature.
 | **Origin** | Both |
 | **AI tool / platform** | Claude (Anthropic) |
 | **Prompt used** | Analysis of all official PRISM hackathon material — problem statements, judging criteria, technical constraints, timelines and evaluation guidelines — with a request to evaluate every theme and recommend one, including scoring, risk analysis and an execution plan. |
-| **Output summary** | A comparative evaluation of all five themes scored against the official rubric weights, a recommendation of Theme 01 based on the availability of an objective self-computable screening metric, and the Bifrost solution concept — bidirectional semantic bridging with a content-addressed version-native index. |
+| **Output summary** | A comparative evaluation of all five themes scored against the official rubric weights, a recommendation of Theme 01 based on the availability of an objective self-computable screening metric, and the Samsung PRISM solution concept — bidirectional semantic bridging with a content-addressed version-native index. |
 | **Modifications made** | Team reviewed the analysis, verified the published benchmark figures independently, and made the final theme selection. Architecture refined during implementation. |
 | **Date** | 16 September 2026 |
 | **Logged by** | _TBD_ |
