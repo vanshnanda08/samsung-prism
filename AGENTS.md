@@ -244,6 +244,23 @@ samsung-prism/
 
 ---
 
+## 8a. Who does what
+
+Work is split four ways. Each role has a self-contained brief in `docs/roles/`
+containing that person's tasks by day, the files they own, the files they must not
+touch, and a paste-ready prompt for their AI assistant.
+
+| Role | Owns | Brief |
+|---|---|---|
+| **Lead** | `eval/`, `configs/`, `docs/` — and the freeze decision | [`docs/roles/LEAD.md`](docs/roles/LEAD.md) |
+| **ML** | `chunking/`, `enrichment/`, `retrieval/` — owns NDCG@10 | [`docs/roles/ML.md`](docs/roles/ML.md) |
+| **Systems** | Docker, deps, ONNX, profiling — owns latency and indexing cost | [`docs/roles/SYSTEMS.md`](docs/roles/SYSTEMS.md) |
+| **Web** | `src/web/` — owns the demo | [`docs/roles/WEB.md`](docs/roles/WEB.md) |
+
+**If you are an AI assistant, ask which role you are working for and read that file
+before editing anything.** Staying inside your role's directories prevents the merge
+conflicts that kill a nine-day project.
+
 ## 9. Rules for AI assistants working in this repo
 
 **Do:**

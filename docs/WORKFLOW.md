@@ -16,6 +16,23 @@ this file says *who does what, when, and what must not be started yet.*
 | **Systems** | CPU performance, ONNX quantisation, Docker, reproducibility, benchmark ops | Hardware/systems |
 | **Web** | Demo UI — search view, Monaco, latency HUD, commit slider | Web development |
 
+### Each person's own brief
+
+Every role has a self-contained file with its own day-by-day tasks, owned files,
+decision rights, and an explicit do-not-build list. **Point your AI assistant at your
+role file plus `AGENTS.md` — that is all it needs.**
+
+| Role | File |
+|---|---|
+| Lead | [`roles/LEAD.md`](roles/LEAD.md) |
+| ML | [`roles/ML.md`](roles/ML.md) |
+| Systems | [`roles/SYSTEMS.md`](roles/SYSTEMS.md) |
+| Web | [`roles/WEB.md`](roles/WEB.md) |
+
+**If the team is three people:** Lead absorbs Systems, or Systems absorbs Web's Days
+1–4 (which are non-coding anyway). Do not drop the Systems role — latency and indexing
+cost are explicitly graded.
+
 **Why "Systems" is on the critical path, not the sidelines:** the theme requires the
 solution to run on CPU and explicitly asks teams to *"report precision@k, recall,
 latency and indexing cost."* Throughput profiling, ONNX int8 export and reproducible
