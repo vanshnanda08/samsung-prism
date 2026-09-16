@@ -1,0 +1,35 @@
+# Bifrost pipeline configuration.
+# Every stage below is a flag so it can be ablated. See docs/WORKFLOW.md.
+
+chunking:
+  strategy: ast          # ast | fixed
+  max_tokens: 512
+  include_parent_context: true
+
+enrichment:
+  doc2query: false       # enable after the 500-doc pilot shows a positive delta
+  structural_signature: true
+  model: Qwen2.5-0.5B-Instruct
+
+query:
+  distillation: false
+  hyde: false
+  multi_chunk_maxsim: false
+  classifier: false
+
+retrieval:
+  views: [code]          # add: synthetic_nl, signature, bm25
+  fusion: rrf
+  rrf_k: 60
+  top_k: 100
+
+rerank:
+  enabled: false
+  model: bge-reranker-base
+  onnx_int8: true
+  top_k: 20
+
+eval:
+  task: AppsRetrieval
+  batch_size: 64
+  subsample: null        # set to an int for fast dev iteration

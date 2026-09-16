@@ -1,0 +1,58 @@
+# Bifrost — Python dependencies
+#
+# Versions are left unpinned until the environment is verified working.
+# Once `make baseline` completes successfully, run:
+#     pip freeze > requirements.lock.txt
+# and commit the lockfile. The organisers require pinned, reproducible setup.
+#
+# Python 3.11 recommended (3.10-3.12 supported).
+# CPU-only: do NOT install a CUDA build of torch.
+
+# --- Evaluation (required for the official screening submission) ---
+mteb
+sentence-transformers
+
+# --- Core ML / inference (CPU) ---
+torch                    # install the CPU wheel: see note below
+transformers
+onnxruntime              # NOT onnxruntime-gpu
+optimum[onnxruntime]     # ONNX export + int8 quantisation of the reranker
+
+# --- Retrieval ---
+hnswlib                  # approximate nearest neighbour index
+bm25s                    # fast sparse/lexical retrieval
+numpy
+scipy
+
+# --- Parsing and chunking ---
+tree-sitter
+tree-sitter-python
+tree-sitter-javascript
+
+# --- Storage ---
+duckdb
+
+# --- Offline enrichment (doc2query) ---
+# llama-cpp-python runs small GGUF models on CPU.
+# Only used at index build time, never at query time.
+llama-cpp-python
+
+# --- API ---
+fastapi
+uvicorn[standard]
+pydantic
+
+# --- Utilities ---
+tqdm
+pyyaml
+datasets
+huggingface-hub
+
+# --- Dev ---
+pytest
+ruff
+
+# NOTE on torch:
+#   Install the CPU-only wheel explicitly to avoid pulling ~2GB of CUDA libraries:
+#     pip install torch --index-url https://download.pytorch.org/whl/cpu
+#   Do this BEFORE `pip install -r requirements.txt`.

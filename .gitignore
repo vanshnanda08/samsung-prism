@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# Models and caches - never commit these
+models/
+*.gguf
+*.onnx
+.cache/
+~/.cache/huggingface/
+hf_cache/
+
+# Indexes and generated data
+index/
+data/raw/
+data/processed/
+*.duckdb
+*.hnsw
+*.bin
+
+# Results - keep the final submission JSON, ignore intermediate runs
+results/**/*
+!results/final/
+!results/final/appsretrieval_results.json
+
+# Node
+node_modules/
+.next/
+out/
+*.log
+
+# Environment
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
