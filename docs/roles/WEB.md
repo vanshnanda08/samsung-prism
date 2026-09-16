@@ -51,7 +51,9 @@ Anything in `src/samsung_prism/`. You consume the API; you don't change it.
 - [ ] **Help run evaluations.** Every extra configuration the team can test today is
       worth more than any pixel. This is genuinely the highest-value thing you can do
       before evening.
-- [ ] Agree the API response shape with the Lead. Get it in writing before you start.
+- [x] API response shape is frozen in [`../API.md`](../API.md) — build against it.
+- [ ] **Scaffold tonight against a mock of that shape** (revised 16 Sep: the
+      compression makes waiting until Day 1 evening a waste of an evening).
 
 ### Evening — start
 

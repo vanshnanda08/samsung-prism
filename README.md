@@ -51,6 +51,7 @@ Bonus goal on top of it.
 | [`AGENTS.md`](AGENTS.md) | **Start here.** Project context, scope, architecture, engineering rules. Written to be read by both people and AI assistants. |
 | [`docs/THEME1_SPEC.md`](docs/THEME1_SPEC.md) | Distilled organiser requirements — facts only, with sources |
 | [`docs/WORKFLOW.md`](docs/WORKFLOW.md) | Day-by-day build plan, role assignments, daily gates, risk register |
+| [`docs/API.md`](docs/API.md) | Frozen request/response contract between the backend and the demo UI |
 | [`docs/roles/`](docs/roles/) | **Per-person briefs** — one file per role with day-by-day tasks, owned files, and a ready-made prompt for that person's AI assistant |
 | [`AI_DISCLOSURE.md`](AI_DISCLOSURE.md) | Running log of AI assistance, required at submission |
 
