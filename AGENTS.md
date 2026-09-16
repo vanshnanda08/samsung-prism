@@ -7,6 +7,12 @@
 
 ---
 
+> ⚠️ **PLAN CHANGED 16 SEP — TWO-DAY SPRINT.** Mid-semester exams start ~19 September.
+> The original nine-day plan is dead. The team builds on **17–18 September and submits
+> on the evening of 18 September**, a week before the deadline. Several features were
+> cut — see [`docs/WORKFLOW.md`](docs/WORKFLOW.md) for the cut list before proposing
+> anything. Default to the cheapest thing that produces a measurable gain.
+
 ## 1. What this project is
 
 **Samsung PRISM** is a CPU-only code retrieval engine built for **Theme 01 — Agentic Code
@@ -121,8 +127,14 @@ hard-code Python-only or JavaScript-only assumptions into the core pipeline.
   rank. Our approach: group versions into a *lineage* by canonical AST hash, rank the
   lineage once, then select the best version within it.
 
-**P1 and Bonus are our differentiation.** Teams optimising only the screening metric
-have no incentive to build them. Do not deprioritise them to chase a marginal NDCG gain.
+**P1 and Bonus are DEFERRED under the two-day plan.** They were the differentiation,
+and they are the first things to add back if free hours appear after mid-sems. Do not
+build them during the sprint — they cost two full days.
+
+With them cut, the pitch leans on rigour instead of novelty: beating the published
+CPU-viable baseline (E5-Base, 11.52) and an ablation table showing what each component
+contributed. Working prototype (30%) plus technical depth (25%) is 55% of the rubric;
+innovation is 20%.
 
 ---
 
@@ -290,29 +302,59 @@ costs an evening we do not have.
 
 ## 10. Current status
 
+**Sprint: 17–18 September. Submit evening of Day 2.**
+
+### Day 0 — 16 Sep
 | Item | Status |
 |---|---|
-| Team registered | ☐ |
-| Repo initialised | ☑ |
+| Team registered | ☑ |
+| Repo initialised and pushed | ☑ |
+| Scripts written (`scripts/spike_mteb.py`, `scripts/run_baseline.py`) | ☑ |
+| MTEB reranker-interface spike run | ☐ |
 | Baseline `e5-base-v2` number recorded | ☐ |
-| MTEB reranker-interface spike resolved | ☐ |
-| Ablation harness working | ☐ |
-| Hybrid retrieval + RRF | ☐ |
-| Query distillation | ☐ |
-| doc2query enrichment | ☐ |
-| ONNX int8 reranking | ☐ |
-| **Eval config frozen, final JSON generated** | ☐ |
-| Content-hash incremental re-indexing | ☐ |
-| Demo UI | ☐ |
-| Docker verified on clean machine | ☐ |
-| Deck, video, disclosure form | ☐ |
 
-**Record your baseline number here as soon as you have it:**
+### Day 1 — 17 Sep
+| Item | Owner | Status |
+|---|---|---|
+| Subsample dev set built **and validated** | Systems | ☐ |
+| tree-sitter chunking + BM25 | ML | ☐ |
+| Hybrid retrieval + RRF | ML | ☐ |
+| Query distillation | ML | ☐ |
+| Template enrichment | ML | ☐ |
+| ONNX int8 rerank *(only if the spike allows)* | Systems | ☐ |
+| Config loop printing a comparison table | Lead | ☐ |
+| UI renders real results | Web | ☐ |
+| doc2query launched overnight *(bonus)* | ML | ☐ |
+
+### Day 2 — 18 Sep
+| Item | Owner | Status |
+|---|---|---|
+| **Eval config frozen — NOON, hard stop** | Lead | ☐ |
+| `appsretrieval_results.json` generated | Lead | ☐ |
+| Docker verified on a clean machine | Systems | ☐ |
+| UI finished | Web | ☐ |
+| Ablation table written | ML | ☐ |
+| README, PPT, AI disclosure | Lead | ☐ |
+| Demo video recorded, under 5:00 | All | ☐ |
+| Release tagged `PRISM_GENAI_HACKATHON_Y2026` | Lead | ☐ |
+| JSON uploaded as a Release asset | Lead | ☐ |
+| **Google Form submitted** | Lead | ☐ |
+
+### Deferred — add back only if free hours appear after mid-sems
+Full doc2query · content-hash incremental re-indexing (P1) · version slider ·
+lineage grouping (Bonus) · structural query routing · Monaco viewer
+
+---
+
+**Record the baseline here as soon as it finishes:**
 
 ```
 e5-base-v2 baseline    NDCG@10: ____    MRR: ____    wall-clock: ____ min
 ```
 
-The wall-clock figure is the team's iteration budget for the rest of the build. If a
-full evaluation pass exceeds ~45 minutes, develop against a subsample and reserve full
-runs for checkpoints.
+Published reference: E5-Base scores 11.52 NDCG@10 on this dataset. Landing near that
+confirms the evaluation path is correct.
+
+**The wall-clock figure decides how many ideas the team gets to try.** If a full pass
+exceeds ~45 minutes, the subsample dev set is not optional — it is Systems' first task
+on Day 1 morning.

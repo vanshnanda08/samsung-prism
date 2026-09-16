@@ -1,84 +1,94 @@
-# Role: Web
+# Role: Web — 2-Day Sprint
 
-> **Brief for you and your AI assistant.** Read [`../../AGENTS.md`](../../AGENTS.md)
-> first for project context, then this file. [`../WORKFLOW.md`](../WORKFLOW.md) has the
-> full timeline; this file is only your slice of it.
+> Read [`../../AGENTS.md`](../../AGENTS.md) first, then this file.
+> Timeline and cut list: [`../WORKFLOW.md`](../WORKFLOW.md).
 
 ## Mandate
 
 **You make the retrieval visible.** The organisers require it:
 
-> *"We would like to see the solution working in the demo. You should not show us just
-> the inference results or the numbers. You should show the responses for a given query.
-> We would also be interested in seeing how fast your solution is."*
+> *"You should not show us just the inference results or the numbers. You should show the
+> responses for a given query. We would also be interested in seeing how fast your
+> solution is."*
 
-A live query interface with visible latency is a requirement, not a nice-to-have.
+A live query interface with visible latency is a requirement. Everything beyond that is
+optional — and in a two-day sprint, optional means cut.
 
-## Read this before anything else
+## Your scope is now three things
 
-**You do not start building until Day 5.**
+1. A search box
+2. Ranked results — file path, line range, snippet, relevance score
+3. **Latency displayed on screen**
 
-That is deliberate and it is the most important instruction in this file. Presentation
-is 10% of the grading rubric; working prototype and technical depth together are 55%.
-More to the point, a UI built before the retrieval API is settled gets rewritten. Teams
-lose this format by polishing a frontend while the engine underneath is unmeasured.
+That is the whole UI. Build those three well and stop.
 
-Days 1–4 you are not idle — see below. You are just not writing frontend code.
+## Cut from the original plan — do not build these
 
-## You own these files
+| Cut | Why |
+|---|---|
+| Monaco code viewer | A styled `<pre>` with syntax highlighting is enough |
+| Commit / version slider | The feature behind it was cut |
+| Baseline comparison pane | Costs a half-day you do not have |
+| Dark mode, animations, polish passes | Presentation is 10% of the rubric |
+
+## You own
 
 ```
-src/web/                    the entire demo UI
+src/web/
 ```
 
 ## You do not touch
 
 Anything in `src/samsung_prism/`. You consume the API; you don't change it.
 
-## Days 1–4 — what to do instead
+---
 
-- [ ] Read [`../THEME1_SPEC.md`](../THEME1_SPEC.md) — especially §10, what the demo must show
-- [ ] Sketch the UI **on paper**. Four screens, no code.
-- [ ] Help run evaluations. Every extra config the team can test is worth more right now
-      than any pixel.
-- [ ] Agree the API response shape with the Lead by end of Day 4 so Day 5 starts clean
+## DAY 1 — 17 September
 
-## Day 5 — scaffold
+### Morning and afternoon — still not coding
 
-- [ ] Next.js + TypeScript + Tailwind + shadcn/ui
-- [ ] Search input, ranked result list
-- [ ] Each result: file path, line range, relevance bar, snippet preview
+- [ ] Read [`../THEME1_SPEC.md`](../THEME1_SPEC.md) §10 — what the demo must show
+- [ ] **Help run evaluations.** Every extra configuration the team can test today is
+      worth more than any pixel. This is genuinely the highest-value thing you can do
+      before evening.
+- [ ] Agree the API response shape with the Lead. Get it in writing before you start.
 
-## Day 6 — the four things that matter
+### Evening — start
 
-| Feature | Why it earns its place |
-|---|---|
-| **Monaco viewer** | Click a result, see the code in context with the surrounding function |
-| **Latency HUD** | The organisers explicitly ask how fast it is. Put the number on screen. |
-| **Commit slider** | Drag to switch repository version; live counter reads *"re-embedded 47 of 8,770 chunks in 1.9 s."* This is goals P1 and Bonus made visible in ten seconds, and almost no competing team will have it. |
-| **Baseline comparison pane** | Same query under stock `e5-base` beside ours. Makes the improvement visible instead of asserted. |
+- [ ] Next.js + TypeScript + Tailwind, scaffolded
+- [ ] Search input wired to the API
+- [ ] Results list rendering: file path, line range, snippet, score
+- [ ] **Latency readout on screen**
 
-The commit slider is the single highest-value thing you build. Prioritise it over polish.
+Ship something that renders real results tonight, however plain. A working ugly page on
+Day 1 beats a beautiful half-finished one on Day 2.
 
-## Day 7
+---
 
-- [ ] Polish, responsive layout, loading states
-- [ ] Make sure it looks right at the resolution you will record the video at
-- [ ] 🔒 **Feature freeze, 6 PM**
+## DAY 2 — 18 September
 
-## Days 8–9
+### Afternoon
 
-- [ ] Support the demo video capture — you know the UI best, so you drive during recording
-- [ ] Multiple takes. Models pre-warmed. Under 5:00.
+- [ ] Syntax highlighting on snippets (`highlight.js` or `prism.js` — one import, done)
+- [ ] Empty state, loading state, error state. Three small things that stop the demo
+      looking broken when something is slow.
+- [ ] Check it looks right **at the resolution you will record the video at**
+- [ ] Hard stop by 6 PM
+
+### Evening
+
+- [ ] **You drive during the video recording** — you know the UI best
+- [ ] Multiple takes, models pre-warmed, under 5:00
+
+---
 
 ## Never build
 
-- **Authentication, login, or user accounts.** Zero rubric value here.
+- **Authentication, login, user accounts.** Zero rubric value.
 - **Any CRUD feature** — saved searches, history, favourites, settings pages
-- **A chat interface.** This is a retrieval project; answer generation is explicitly out
-  of scope per the organiser guidelines.
-- A settings panel exposing every config flag. One or two toggles for the demo, no more.
-- Anything requiring a backend change you did not agree with the Lead
+- **A chat interface.** This is retrieval; answer generation is explicitly out of scope
+  per the organiser guidelines.
+- A settings panel exposing config flags. One toggle at most.
 
 If you find yourself building a form that writes to a database, stop — you have drifted
 into the exact category of work this rubric does not reward.
@@ -87,14 +97,12 @@ into the exact category of work this rubric does not reward.
 
 ```
 Read AGENTS.md and docs/roles/WEB.md in full before doing anything.
-I own the demo UI. Today is Day N.
-Only modify src/web/. Never modify src/samsung_prism/ — I consume that API,
-I don't change it.
+I own the demo UI. This is a 2-day sprint; today is Day N.
+Only modify src/web/. Never modify src/samsung_prism/ — I consume that API.
+Scope is exactly three things: a search box, a ranked results list showing
+file path and line range, and latency displayed on screen. Nothing else.
 Do NOT build authentication, user accounts, saved searches, settings pages,
 or any CRUD feature — they score zero in this hackathon's rubric.
-Do NOT build a chat interface. This is a retrieval project; answer generation
-is explicitly out of scope.
-The four features that matter: ranked results with file:line, a Monaco code
-viewer, an on-screen latency readout, and a version/commit slider showing
-incremental re-indexing.
+Do NOT build a chat interface. Answer generation is out of scope.
+Prefer the simplest implementation. I have about one working day.
 ```

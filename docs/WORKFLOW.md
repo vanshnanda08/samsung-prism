@@ -1,259 +1,179 @@
-# Workflow — Build Plan, Roles, and Daily Gates
+# Workflow — 2-Day Sprint
 
-**Window: 16 – 25 September 2026. Nine days.**
+> **Plan changed 16 Sep.** Mid-semester exams start ~19 September, so the original
+> nine-day plan is dead. This is a **two-day sprint ending in a complete, submitted
+> entry** on 18 September — one week before the actual deadline.
 
-This file is the operational plan. `AGENTS.md` says *what* we are building and why;
-this file says *who does what, when, and what must not be started yet.*
+## The governing principle
+
+**Be fully submittable by end of Day 2.** A finished entry in hand beats a better plan
+you cannot execute during exams.
+
+If free hours appear later, improvements get pushed and the release tag moves. The
+tagged commit is what gets judged, so nothing is lost by shipping early.
+
+| | |
+|---|---|
+| **Day 0** | 16 Sep — registered ✅, repo pushed ✅, baseline running |
+| **Day 1** | 17 Sep — build and measure the pipeline |
+| **Day 2** | 18 Sep — freeze by noon, ship by evening |
+| **19 Sep →** | Mid-sems. Nothing scheduled. |
+| **25 Sep** | Official deadline. Already submitted by then. |
 
 ---
 
-## Team and roles
+## What was cut, and why
 
-| Role | Owns | Primary skill |
+| Cut | Was | Why |
 |---|---|---|
-| **Lead** | Architecture, MTEB harness, ablation harness, the freeze decision | — |
-| **ML** | Retrieval pipeline quality — hybrid retrieval, distillation, enrichment | AI/ML |
-| **Systems** | CPU performance, ONNX quantisation, Docker, reproducibility, benchmark ops | Hardware/systems |
-| **Web** | Demo UI — search view, Monaco, latency HUD, commit slider | Web development |
+| Chrono-Index / version slider | The main differentiator (Days 5–6) | Two full days of work. Does not survive the window. |
+| Structural query routing | Day 7 stretch | Was already optional. |
+| Monaco code viewer | Day 6 | Nice, not graded. |
+| Baseline comparison pane | Day 6 | Cut to save Web's Day 2. |
+| Wide ablation matrix (20 configs) | Days 3–4 | Reduced to 5 runs. |
+| Multi-model embedding ensemble | Day 3 | Two views, not four. |
 
-### Each person's own brief
+### One change of substance
 
-Every role has a self-contained file with its own day-by-day tasks, owned files,
-decision rights, and an explicit do-not-build list. **Point your AI assistant at your
-role file plus `AGENTS.md` — that is all it needs.**
+**Template enrichment is now the primary corpus-side lever, not doc2query.**
+Extracting identifiers, docstrings, imports and control-flow shape costs seconds.
+doc2query over 8,770 documents costs ~5 hours of laptop CPU. It runs overnight as a
+bonus — if it is not finished by Day 2 morning, it gets killed and the template version
+ships.
 
-| Role | File |
-|---|---|
-| Lead | [`roles/LEAD.md`](roles/LEAD.md) |
-| ML | [`roles/ML.md`](roles/ML.md) |
-| Systems | [`roles/SYSTEMS.md`](roles/SYSTEMS.md) |
-| Web | [`roles/WEB.md`](roles/WEB.md) |
+### One change of sequencing
 
-**If the team is three people:** Lead absorbs Systems, or Systems absorbs Web's Days
-1–4 (which are non-coding anyway). Do not drop the Systems role — latency and indexing
-cost are explicitly graded.
-
-**Why "Systems" is on the critical path, not the sidelines:** the theme requires the
-solution to run on CPU and explicitly asks teams to *"report precision@k, recall,
-latency and indexing cost."* Throughput profiling, ONNX int8 export and reproducible
-packaging are graded work, not support work.
+**Web starts Day 1 evening, not Day 5.** There is no Day 5.
 
 ---
 
-## The governing rules
+## Roles
 
-1. **Measure before you build.** No component enters the pipeline without an ablation
-   number showing it helps.
-2. **Freeze the eval config on Day 4.** After that the submitted number does not change.
-   Everything later is differentiation and presentation.
-3. **No frontend before Day 5.** Starting earlier is the standard way this fails.
-4. **Feature freeze 6 PM on Day 7.** Not negotiable.
-5. **Submit Day 9 by 6 PM**, not 11:59 PM. Leave margin for a form that will not load.
+| Role | Owns | Brief |
+|---|---|---|
+| **Lead** | `eval/`, `configs/`, `docs/` — and the freeze call | [`roles/LEAD.md`](roles/LEAD.md) |
+| **ML** | `chunking/`, `enrichment/`, `retrieval/` — owns NDCG@10 | [`roles/ML.md`](roles/ML.md) |
+| **Systems** | Docker, deps, ONNX, profiling — owns the fast feedback loop | [`roles/SYSTEMS.md`](roles/SYSTEMS.md) |
+| **Web** | `src/web/` — owns the demo | [`roles/WEB.md`](roles/WEB.md) |
 
----
+**Point your AI assistant at `AGENTS.md` plus your own role file.** That is all it needs.
 
-## Day 0 — 16 September (tonight)
-
-### Blocking, do first
-
-- [ ] **Register the team.** Closes 11:59 PM. Nothing else matters until this is done.
-      `https://forms.gle/NxN6TWXLpcXmTnv66`
-- [ ] Email `prism@samsung.com` with the open questions in `docs/THEME1_SPEC.md` §12
-
-### Then
-
-- [ ] Push this repository to GitHub (public)
-- [ ] `pip install mteb sentence-transformers`
-- [ ] Launch the stock `intfloat/e5-base-v2` baseline through MTEB and let it run
-      overnight. Expect 30–60 minutes on CPU.
-- [ ] **Record the wall-clock time.** That number is the team's iteration budget.
-
-**Do NOT:** design the pipeline, evaluate model options, write a README, touch the UI.
-
-**Exit criterion:** registered, and one real number on the board.
+**Three people?** Lead absorbs Systems. Do not drop the Systems work — the subsample dev
+set is now the single most important thing anyone builds.
 
 ---
 
-## Day 1 — 17 September
-
-### The critical spike — Lead, 2 hours, hard time-box
-
-Can a cross-encoder reranking stage be expressed inside MTEB's `AbsEncoder`?
-
-This one answer determines the architecture. Discovering it on Day 7 would cost the
-week. If the answer is no, the submitted JSON reflects the bi-encoder pipeline and the
-reranker becomes a demo asset and an ablation row — that is a legitimate outcome, not a
-failure, but it must be known now.
-
-- [ ] Spike resolved, decision recorded in `docs/THEME1_SPEC.md` §7
-
-### Parallel work
-
-| Who | Task |
-|---|---|
-| **ML** | tree-sitter AST-aware chunking; BM25 (`bm25s`) over identifiers |
-| **Systems** | Full-eval wall-clock profiling. If >45 min, build the subsample dev set now. Docker skeleton, `requirements.txt` |
-| **Web** | Nothing on the frontend. Read `docs/THEME1_SPEC.md`, sketch the UI on paper, help run evals |
-
-**Exit criterion:** spike resolved; iteration budget known.
-
----
-
-## Day 2 — 18 September
-
-- [ ] **Lead:** ablation harness — change one config flag, get NDCG@10 and MRR back
-- [ ] **ML:** hybrid dense + sparse retrieval fused with RRF; query distillation
-      (1,400 words → algorithmic core)
-- [ ] **Systems:** subsample dev set validated against full-run results
-
-The ablation harness is the most valuable tool in the project. Every later decision runs
-through it. Build it properly.
-
-**Gate:** if the pipeline is not above the BM25 baseline by end of day, stop adding
-components and re-read the guidelines.
-
----
-
-## Day 3 — 19 September
-
-- [ ] **ML:** doc2query pilot on **500 documents only**. Measure the NDCG delta before
-      committing hours of CPU to all 8,770. If the delta is weak, fall back to
-      template-based structural enrichment — identifiers, docstrings, imports,
-      control-flow summary — which costs seconds instead of hours.
-- [ ] **ML:** multi-chunk query embedding with max-sim pooling
-- [ ] **Systems:** ONNX int8 export of the reranker; measure pairs/second; find the `k`
-      at which reranking stops paying for itself
-- [ ] **Evening:** launch full-corpus doc2query enrichment overnight
-
-**Do NOT:** start the frontend.
-
----
-
-## Day 4 — 20 September
-
-- [ ] Integrate the enriched index; run the full ablation matrix
-- [ ] Select the best configuration
-- [ ] **FREEZE THE EVAL CONFIG**
-- [ ] Generate the final `appsretrieval_results.json`
-- [ ] Record the number in `AGENTS.md` §10
-
-**Exit criterion: the submitted number exists.** Everything after this is
-differentiation and presentation. This is the most important gate in the plan — it means
-the remaining five days carry no risk to the screening score.
-
----
-
-## Days 5–6 — 21–22 September
-
-### Chrono-Index (Lead + ML) — this is the differentiation
-
-- [ ] Content-hash chunk store keyed on AST-normalised form, so whitespace and comment
-      changes do not invalidate an embedding
-- [ ] Version manifest: `(version, file, span) → chunk_hash`
-- [ ] Incremental re-index: diff manifests, embed only new hashes
-- [ ] Lineage grouping by canonical AST hash; rank each lineage once, then select the
-      best version within it
-
-This covers goal **P1** and the **Bonus**. Teams optimising only the screening metric
-will not build it.
-
-### Frontend (Web) — start now
-
-- [ ] Next.js scaffold, search view, ranked results with file:line
-- [ ] Monaco viewer with surrounding function context
-- [ ] Latency HUD
-- [ ] Commit slider with a live "re-embedded N of M chunks in T seconds" counter
-- [ ] Baseline comparison pane — same query under stock `e5-base` beside Samsung PRISM
-
----
-
-## Day 7 — 23 September
-
-- [ ] Frontend polish
-- [ ] **Stretch, only if Days 5–6 finished on schedule:** structural query routing via
-      call graph — the *"which files call X before Y?"* capability from the deck.
-      Cut without hesitation if the schedule slipped.
-- [ ] **`docker compose up` on a machine that has never seen this project.** A fresh
-      container or a teammate's laptop. Fix whatever breaks.
-
-**🔒 FEATURE FREEZE — 6 PM. No new code after this point.**
-
----
-
-## Day 8 — 24 September
-
-Writing day. No code.
-
-- [ ] README with genuinely reproducible setup instructions
-- [ ] Architecture diagram for the PPT
-- [ ] **Ablation table** — what each component contributes
-- [ ] Metrics report: NDCG@10, MRR, precision@k, recall, latency, indexing cost
-- [ ] **Known limitations, written honestly.** The template has a slide for this and
-      honesty reads as senior.
-- [ ] `AI_DISCLOSURE.md` completed per feature
-- [ ] 12-slide PPT using the supplied template, named `CollegeName_TeamName`
-- [ ] Rehearse the demo against a stopwatch
-
-**If something is broken and not load-bearing, document it as a limitation rather than
-fixing it.**
-
----
-
-## Day 9 — 25 September
+## DAY 1 — 17 September
 
 ### Morning
 
-- [ ] Clean-machine Docker verification, one final time
-- [ ] Record the demo video — multiple takes, models pre-warmed, **under 5:00**
-- [ ] Upload to YouTube/Drive and **verify the link from a logged-out browser**
+**Lead** — read the spike output, decide the architecture, tell everyone. 30 minutes.
+The spike answers one question: can reranking go in the graded submission, or only in
+the demo? Everything ML does today depends on that answer.
 
-### Afternoon — submission checklist
+**Systems** — **build the subsample dev set. This is now mandatory.**
+~400 queries against the full corpus. Verify it ranks configurations the same way the
+full run does by testing two configs both ways. With two days you cannot afford
+60-minute feedback loops; you need 5-minute ones. Nothing else you build matters as much.
 
-- [ ] `appsretrieval_results.json` uploaded as a **GitHub Release asset**
-- [ ] Release tagged **exactly** `PRISM_GENAI_HACKATHON_Y2026` on the final commit
-- [ ] PPT, video link and all documentation **present inside the tagged commit**
-- [ ] README verified by someone who did not write it
-- [ ] Docker builds and runs on a clean machine
-- [ ] PPT filename follows `CollegeName_TeamName`
-- [ ] AI Usage Disclosure form completed and signed
-- [ ] Google Form submitted
+**ML** — tree-sitter chunking, BM25 over identifiers, dense retrieval, RRF fusion.
+Measure on the subsample as soon as it exists.
 
-**Submit by 6 PM.**
+**Web** — nothing yet. Help run evaluations.
 
-**Do NOT:** touch the code, re-run the evaluation, or improve one more thing.
+### Afternoon
+
+**ML** — query distillation (1,400 words → algorithmic core), then template enrichment
+on the corpus side. **Measure each separately** so both get an ablation row.
+
+**Systems** — ONNX int8 reranker export, if the spike allows reranking. Otherwise
+straight to Docker.
+
+**Lead** — a config loop that runs 4–5 variants and prints a comparison table. A loop,
+not a framework.
+
+### Evening
+
+- **Launch doc2query on the full corpus overnight.** If it is not done by morning, kill
+  it. Do not wait on it.
+- **Web starts.** Search box, ranked results with file and line, latency on screen.
+  That is the entire UI.
+
+### End of Day 1 you must have
+
+- [ ] A number above the E5-Base baseline
+- [ ] A UI that renders results
+- [ ] Every component behind a config flag
 
 ---
 
-## The 5-minute demo script
+## DAY 2 — 18 September
+
+### Morning — freeze by noon
+
+- [ ] Integrate whatever enrichment finished overnight
+- [ ] Run the final 4–5 variants on the **full** set, not the subsample
+- [ ] 🔒 **Pick the winner. Freeze. Noon. No exceptions.**
+- [ ] Generate `appsretrieval_results.json`
+
+### Afternoon — parallel, no dependencies
+
+**Systems** — `docker compose up` on a machine that has never seen the repo. Fix what
+breaks. Something always breaks.
+**Web** — finish the UI. Check it looks right at the resolution you will record at.
+**Lead** — README, ablation table, the 12-slide PPT, `AI_DISCLOSURE.md`.
+
+### Evening — ship
+
+1. [ ] Record the demo video — models pre-warmed, under 5:00, multiple takes
+2. [ ] Upload to YouTube or Drive, **verify the link from a logged-out browser**
+3. [ ] Tag the release **exactly** `PRISM_GENAI_HACKATHON_Y2026`
+4. [ ] Upload `appsretrieval_results.json` as a **GitHub Release asset**
+5. [ ] Confirm the PPT, video link and docs are inside the tagged commit
+6. [ ] PPT filename follows `CollegeName_TeamName`
+7. [ ] Submit the Google Form
+
+**Then stop. You are safe through mid-sems.**
+
+---
+
+## The 5-minute demo script (compressed)
 
 | Time | Content |
 |---|---|
-| 0:00–0:35 | The problem, and the number. *"BM25 gets 0.95 NDCG@10 on this dataset. The best CPU-runnable published model gets 11.52. Here is why, and what we did about it."* |
-| 0:35–1:35 | Live query against the JS repo. Results in *X* ms with file:line. Click through to Monaco. |
-| 1:35–2:25 | Side-by-side against the `e5-base` baseline on a hard query with zero lexical overlap. |
-| 2:25–3:25 | **The commit slider.** Switch version → *"re-embedded 47 of 8,770 chunks in 1.9 s"* → same query, results shift. Then the cross-version lineage view. *(P1 + Bonus, on screen, in sixty seconds.)* |
-| 3:25–4:10 | Structural query answered from the call graph, not the vector index. |
-| 4:10–5:00 | Results: NDCG@10 and MRR vs published baselines, the ablation table, indexing cost, CPU-only. End on limitations. |
+| 0:00–0:45 | The problem and the number. *"BM25 scores 0.95 on this dataset. The best CPU-runnable published model scores 11.52. Here is why, and what we did."* |
+| 0:45–2:00 | Live query. Ranked results with file and line. Latency on screen. |
+| 2:00–3:00 | A second, harder query with zero lexical overlap — show it still works. |
+| 3:00–4:15 | **The ablation table.** Each component, and what it contributed. This is now your strongest asset — use the time on it. |
+| 4:15–5:00 | Architecture in one diagram, CPU-only, indexing cost. End on limitations honestly. |
 
-**Record it. Do not perform it live.** Pre-warm all models. Show cold-start separately
-and honestly rather than hiding it.
+**Record it. Do not perform it live.**
 
 ---
 
-## Post-submission — 26 September to 15 October
+## If free hours appear after mid-sems
 
-If shortlisted on 9 October, the final demo round on 15 October includes *"Q&A on design
-decisions and trade-offs."* Prepare answers to:
+Cheapest wins first. Push, move the tag, done.
 
-- Why these embedding models and not others?
-- Why RRF rather than learned fusion weights?
-- What does the reranker cost in latency, and what does it buy?
-- How does re-indexing scale to a 100,000-file repository?
-- What does the system do badly, and why?
-- What would the first three months of worklet work look like?
+1. Full doc2query, if the overnight run never finished
+2. Content-hash incremental re-indexing — goal **P1**, roughly 3 hours
+3. The version slider in the UI — makes P1 visible in ten seconds
+4. Lineage grouping — the **Bonus** goal
 
-Being able to say *"we tried X, it cost Y, here is the number"* is worth more than any
-slide.
+---
+
+## How the story changes
+
+Without the version-native index you lose the *"nobody else built this"* angle. So lean
+on what you do have:
+
+- **The ablation table** — what each component contributes, measured
+- **Beating the published CPU baseline** — E5-Base is 11.52, verifiable, public
+- **Honest limitations** — including what you would have built with more time
+
+*"Here is our number, and here is exactly which component earned each point"* is a
+strong submission. It is rigour rather than novelty — and **rigour is 55% of the
+rubric** (working prototype 30% + technical depth 25%), while innovation is 20%.
 
 ---
 
@@ -261,10 +181,9 @@ slide.
 
 | Risk | Mitigation |
 |---|---|
-| MTEB cannot express reranking | Submit bi-encoder JSON; reranker in demo + ablation table |
-| Cross-encoder too slow on CPU | Reduce `k` 50→20→10; ONNX int8; truncate; report the trade-off as a finding |
-| doc2query quality poor from a 0.5B model | Template-based structural enrichment, no LLM |
-| Full eval too slow to iterate | Subsample dev set; full runs at checkpoints only |
-| Organiser JS repo never arrives | Public open-source JS voice-assistant repo, declared in README |
-| Docker fails on a clean machine | Tested Day 7, not Day 9 |
-| Documentation crunch on Days 8–9 | Add a 4th member who owns deck, video and disclosure form |
+| MTEB cannot express reranking | Bi-encoder JSON; reranker in demo + ablation row |
+| doc2query does not finish overnight | Template enrichment ships instead. Already the primary. |
+| Subsample ranks configs wrongly | Validate against full runs on Day 1 morning before trusting it |
+| Freeze slips past noon on Day 2 | Ship the best config you have at noon regardless |
+| Docker fails on a clean machine | Tested Day 2 afternoon, not Day 2 evening |
+| Exams start early | Everything is submitted by Day 2 evening — this is why |

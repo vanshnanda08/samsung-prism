@@ -59,6 +59,13 @@ writing any code.**
 
 ---
 
+## Status
+
+**Two-day sprint: 17–18 September, submitting evening of Day 2.** Mid-semester exams
+start ~19 Sep, so the build is compressed and several features are deferred — see
+[`docs/WORKFLOW.md`](docs/WORKFLOW.md) for the cut list and
+[`AGENTS.md`](AGENTS.md) §10 for live status.
+
 ## Quickstart
 
 ```bash
